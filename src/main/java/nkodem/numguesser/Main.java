@@ -10,7 +10,7 @@ public class Main {
         System.out.print("Enter your nickname: ");
         String nickname = scanner.nextLine();
         Player player = new Player(nickname);
-        AIPlayer ai = new AIPlayer("program");
+        AIPlayer ai = new AIPlayer("programtest");
 
         boolean running = true;
 
