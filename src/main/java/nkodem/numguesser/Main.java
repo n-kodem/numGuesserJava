@@ -20,8 +20,24 @@ public class Main {
         System.out.print("Enter your nickname: ");
         String nickname = scanner.nextLine();
         Player player = new Player(nickname);
+        // Check if player data already exists and ask if they want reset data
+        // If data exists, offer reset option
+        if (player.hasSavedData()) {
+            System.out.print("Data for this nickname exists. Reset data? (This cannot be undone.) (y/N): ");
+            String resp = scanner.nextLine().trim().toLowerCase();
+            if (resp.equals("y") || resp.equals("yes")) {
+                player.resetData();
+                player.saveData();
+                System.out.println("Data has been cleared.");
+            }
+        }
+        // Whether data existed or not, load data
+        player.loadData();
+
+
         AIPlayer ai = new AIPlayer("programtest");
 
+        // ====== Menu ======
         boolean running = true;
 
         while (running) {

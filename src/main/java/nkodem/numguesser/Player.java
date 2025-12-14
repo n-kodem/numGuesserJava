@@ -21,7 +21,7 @@ public class Player {
         this.losses = 0;
         this.botGames = 0;
         this.timesBotFooled = 0;
-        loadData();
+        //loadData();
     }
 
     public String getNickname() {
@@ -58,7 +58,7 @@ public class Player {
     public int addBotFooled() { return timesBotFooled++; }
 
 
-    private void loadData() {
+    public void loadData() {
         File file = new File(nickname + ".txt");
         if (!file.exists()) return;
 
@@ -96,7 +96,42 @@ public class Player {
             System.out.println("Error loading player data.");
         }
     }
+    public void resetData() {
+        File file = new File(nickname + ".txt");
+        if (file.exists()) {
+            try {
+                if (!file.delete()) {
+                    System.out.println("Could not delete player data file.");
+                    return;
+                }
+                loadData();
+            } catch (SecurityException e) {
+                System.out.println("Insufficient permissions to delete player data file.");
+            }
+        }
+    }
 
+    public boolean hasSavedData() {
+        File file = new File(nickname + ".txt");
+        try {
+            if (!file.isFile()) {
+                System.out.println("ERR: Expected a file but found a non-file entry for " + nickname + ".");
+                return false;
+            }
+            if (!file.canRead()) {
+                System.out.println("ERR: Player data file exists but is not readable for " + nickname + ".");
+                return false;
+            }
+            if (file.length() == 0) {
+                System.out.println("WAR: Player data file is empty for " + nickname + ".");
+                return false;
+            }
+            return true;
+        } catch (SecurityException e) {
+            System.out.println("ERR: Insufficient permissions to check player data file for " + nickname + ".");
+            return false;
+        }
+    }
     public void saveData() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(nickname + ".txt"))) {
             for (String difficulty : bestScores.keySet()) {
